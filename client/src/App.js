@@ -3,6 +3,10 @@ import axios from 'axios';
 import './App.css';
 
 const BASE_URL = "http://localhost:4000"
+const CLEARED_POST = {
+  title: '',
+  contents: ''
+}
 
 class App extends Component {
   state = {
@@ -24,7 +28,6 @@ class App extends Component {
       })
     }
   }
-
 
   getPosts = async query => {
     this.setState({
@@ -60,6 +63,7 @@ class App extends Component {
       const { data: post } = await axios.post(`${BASE_URL}/api/posts`, postInputs)
       this.setState(prevState => ({
         posts: [...prevState.posts, post[0]],
+        postInputs: CLEARED_POST
       }))
     } catch (error) {
       this.setState({
