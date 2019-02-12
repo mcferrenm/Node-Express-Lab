@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const newPost = req.body;
-  if(!newPost.title || !newPost.contents) {
+  if (!newPost.title || !newPost.contents) {
     res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
   } else {
     try {
@@ -42,8 +42,24 @@ router.post('/', async (req, res) => {
 
 });
 
-router.delete('/', (req, res) => {
-
+router.delete('/:id', async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const post = await db.findById(postId)
+    if (post.length > 0) {
+      const isDeleted = await db.remove(postId)
+      if (isDeleted > 0) {
+        // TODO Also send status code 204 somehow
+        res.json(post[0]).end()
+      } else {
+        res.status(500).json({ error: "The post exists but could not be removed" })
+      }
+    } else {
+      res.status(404).json({ message: "The post with the specified ID does not exist." })
+    }
+  } catch (error) {
+    res.status(500).json({ error: "The post could not be removed" })
+  }
 });
 
 router.put('/', (req, res) => {
