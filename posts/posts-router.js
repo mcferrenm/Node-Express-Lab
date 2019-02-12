@@ -12,8 +12,18 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
-
+router.get('/:id', async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const post = await db.findById(postId);
+    if(post.length > 0) {
+      res.status(200).json(post)
+    } else {
+      res.status(404).json({ message: "The post with the specified ID does not exist." })
+    }
+  } catch (error) {
+    res.status(500).json({ error: "The post information could not be retrieved." })
+  }
 });
 
 router.post('/', (req, res) => {
