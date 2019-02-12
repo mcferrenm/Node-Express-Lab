@@ -12,7 +12,7 @@ class App extends Component {
       contents: ''
     },
     isLoading: false,
-    error: null
+    error: ''
   }
 
   componentDidMount() {
@@ -96,20 +96,22 @@ class App extends Component {
       return <p>Loading...</p>
     }
     if (error) {
-      return <p>{error}</p>
+      return <p>{error.message}</p>
     }
 
     return (
       <div className="App">
-        <input onChange={this.handleChange} type="text" name="title" value={title} />
-        <input onChange={this.handleChange} type="text" name="contents" value={contents} />
-        <button onClick={this.handleAddPost}>Add post</button>
-        <button onClick={this.handleSortPosts} name="name">Sort by name</button>
-        <button onClick={this.handleSortPosts} name="id">Sort by id</button>
+        <div className="form">
+          <input onChange={this.handleChange} type="text" name="title" value={title} />
+          <input onChange={this.handleChange} type="text" name="contents" value={contents} />
+          <button onClick={this.handleAddPost}>Add post</button>
+          <button onClick={this.handleSortPosts} name="name">Sort by name</button>
+          <button onClick={this.handleSortPosts} name="id">Sort by id</button>
+        </div>
         {this.state.posts.map(({ title, contents, id }) =>
-          <div key={id} onClick={() => this.handleDeletePost(id)}>
-            <p>{title}</p>
-            <p>{contents}</p>
+          <div className="post-item" key={id} onClick={() => this.handleDeletePost(id)}>
+            <p>Title: {title}</p>
+            <p>Contents: {contents}</p>
           </div>
         )}
       </div>
